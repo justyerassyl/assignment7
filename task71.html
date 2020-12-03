@@ -1,0 +1,54 @@
+<html>
+<head>
+<style>
+#news{
+	border:1px solid red;
+	width:400px;
+	height:300px;
+}
+</style>
+</head>
+<body>
+
+<div id="news"></div>
+<button id="sport">Load Sport news</button>
+<button id="politics">Load Politics news</button>
+<button id="bussiness">Load Bussiness news</button>
+
+
+<script>
+/* Write your code here */
+
+var txt = document.querySelector("#news");
+var buttons = document.querySelectorAll("button");
+
+function clickFn1(event){
+	const urlSport = "http://demo3262411.mockable.io/news-sport";
+	
+	fetch(urlSport).then(onSuccess);
+}
+function clickFn2(event){
+	const urlPolitic = "http://demo3262411.mockable.io/news-politics";
+	fetch(urlPolitic).then(onSuccess);
+}
+function clickFn3(event){
+	const urlBussiness = "http://demo3262411.mockable.io/news-bussiness";
+	fetch(urlBussiness).then(onSuccess);
+}
+
+function onProcess(text){
+	txt.innerHTML= text;
+}
+
+function onSuccess(response){
+	response.text().then(onProcess);
+}
+
+buttons[0].addEventListener("click", clickFn1);
+buttons[1].addEventListener("click", clickFn2);
+buttons[2].addEventListener("click", clickFn3);
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <style>
+      #cards .card{
+        border:1px solid red;
+        display:flex;
+        width:300px;
+      }
+      #cards .card .title{
+        flex-grow: 1;
+      }
+      #cards .card .price{
+        font-weight: bold;
+        padding-right: 20px;
+      }
+      #loading{
+        display: none;
+      }
+      #cards{
+        width:300px;
+        height:200px;
+        border: 1px solid blue;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <button>Load</button>
+    <div>
+      <button id="sortByMaker">Sort by maker</button>
+      <button id="sortByPrice">Sort by price</button>
+    </div>
+    <div id="cards">
+      <img width="300px" height="200px" id="loading" src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"/>
+    </div>
+
+
+    <script defer>
+      var info = document.querySelector("#cards");
+      var button = document.querySelector("button");
+      var icon = document.querySelector("img");
+
+      var sortTitle = document.querySelector("#sortByMaker");
+      var sortPrice = document.querySelector("#sortByPrice");
+
+      function onClickFn(event){
+      const url ="http://demo3262411.mockable.io/list-cars";
+      fetch(url).then(onSuccess, onError);
+      icon.style.display = "block";
+      }
+
+      function onSuccess(response){
+        response.text().then(onProcessText);
+      }
+
+      function onError(error){
+        info.innerHTML="";
+      }
+
+      var data;
+      function onProcessText(text){
+        icon.style.display = "none";
+        for(var i=0; i<3; i++){
+          var tag = document.createElement("div");
+          tag.setAttribute("class", "card");
+
+          var title = document.createElement("div");
+          title.setAttribute("class", "title");
+          var price = document.createElement("div");
+          price.setAttribute("class", "price");
+
+          tag.appendChild(title);
+          tag.appendChild(price);
+          info.appendChild(tag);
+
+        }
+        var titles = document.querySelectorAll(".title");
+        var prices = document.querySelectorAll(".price");
+        var obj = JSON.parse(text);
+
+        data = obj;
+
+        for(var i=0; i<3; i++){
+        titles[i].innerHTML = obj[i]["company"] + obj[i]["model"];
+        prices[i].innerHTML = obj[i]["price"];
+        }
+      }
+
+
+        function sortTitles(){
+          var titles2 = document.querySelectorAll(".title");
+          var prices2 = document.querySelectorAll(".price");
+          data.sort(function (a, b) {
+              return a.company.localeCompare(b.company);
+          });
+          console.log(data);
+          for(var i=0; i<3; i++){
+            titles2[i].innerHTML = data[i]["company"] + data[i]["model"];
+            prices2[i].innerHTML = data[i]["price"];
+          }
+        }
+
+        function sortPrices(){
+          var titles2 = document.querySelectorAll(".title");
+          var prices2 = document.querySelectorAll(".price");
+          data.sort(function(a, b){
+              return a.price - b.price
+          });
+          console.log(data);
+          for(var i=0; i<3; i++){
+            titles2[i].innerHTML = data[i]["company"] + data[i]["model"];
+            prices2[i].innerHTML = data[i]["price"];
+          }
+        }
+       
+
+      button.addEventListener("click", onClickFn);
+      sortTitle.addEventListener("click", sortTitles);
+      sortPrice.addEventListener("click", sortPrices);
+
+    </script>
+  </body>
+
+</html>
